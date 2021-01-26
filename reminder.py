@@ -1,6 +1,8 @@
 import time
 import yaml
 import requests
+from datetime import datetime
+from croniter import croniter
 
 # 知识共享 署名-相同方式共享 3.0协议 作者:IceTiki
 
@@ -14,11 +16,11 @@ def getYmlConfig(yaml_file):
 
 # 自动取整的1分钟计时器，会自动同步系统时间的00秒。
 def waitingforintmin():
-    print('触发了一下')
-    waiting=60-int(time.strftime("%S", time.localtime()))
+    print('触发~')
+    waiting=60-(int(time.strftime("%S", time.localtime()))+30)%60
     for i in range(waiting):
         time.sleep(1)
-        print(60-waiting+i)
+        print(waiting-i)
 
 # 封装好的提醒实例
 class remind:
@@ -28,13 +30,7 @@ class remind:
 
     # 补齐时间，并判断是否匹配现在时间，如果是返回1，反之0
     def istime(self,string):
-        nowtlist=time.strftime("%Y %w %m %d %H %M", time.localtime()).split(' ')
-        tlist=string.split(' ')
-        for i in range(6):
-            if tlist[i]=='*':
-                tlist[i]=nowtlist[i]
-        string=" ".join(tlist)
-        if tlist==nowtlist:
+        if croniter.match(string, datetime.now()):
             return 1
         else:
             return 0
@@ -58,8 +54,9 @@ class remind:
         return 0
 
 # -------------------------开始-------------------------
-timetable = getYmlConfig('timetable.yml')
-while 1:
+# 提供给腾讯云函数的main_handler
+def main_handler(event, context):
+    timetable = getYmlConfig('timetable.yml')
     remind(timetable['trigger'])
-    waitingforintmin()
-    
+
+# main_handler(1,2)
