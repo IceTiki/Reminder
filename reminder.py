@@ -28,7 +28,7 @@ class remind:
     def __init__(self,table):
         self.SendListByQmsg(self.matchlist(table['timetable']),table['qq'],table['key'])
 
-    # 补齐时间，并判断是否匹配现在时间，如果是返回1，反之0
+    # 判断是否匹配现在时间，如果是返回1，反之0
     def istime(self,string):
         if croniter.match(string, datetime.now()):
             return 1
