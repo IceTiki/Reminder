@@ -1,24 +1,24 @@
-#time格式为 "%Y %w %m %d %H %M"，*为通配符
+#time使用cron表达式"分 时 日 月 周"，请参考https://www.runoob.com/linux/linux-comm-crontab.html
 trigger:
- qq: 'xxxxxxxxxxx'
+ qq: '12345'
  #qmsg酱的key
- key: xxxxxxxxxxxxxxxxxxx
+ key: xxxxxxxxxxxxxxxxxxxxxxx
  timetable:
   -
     title: '早安，早上的状态会为一天奠定基调，就算仍有困意，也要强迫自己打起精神来!'
-    time: '* * * * 7 0'
+    time: '0 7 * * *'
   -
     title: '午饭吃了没？'
-    time: '* * * * 12 0'
+    time: '0 12 * * *'
   -
     title: '午安，休息下吧。'
-    time: '* * * * 13 0'
+    time: '0 13 * * *'
   -
     title: '夜幕降临，灯火初上。嗯——又是安宁祥和的一天呢。放下手上的工作准备睡觉吧。'
-    time: '* * * * 21 0'
+    time: '0 21 * * *'
   -
     title: '去休息吧。'
-    time: '* * * * 22 30'
+    time: '30 22 * * *'
   -
     title: '认真工作是不错，不要忘记补充水分'
-    time: '* * * * * 0'
+    time: '*/30 * 25 1 *'
