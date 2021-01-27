@@ -48,15 +48,31 @@ class remind:
         if len(thinglist)==0:
             return 0
         else:
-            msg=str(thinglist)
+            msg=self.List2Msg(thinglist)
         posturl='https://qmsg.zendee.cn/send/'+key
         res = requests.post(url=posturl,data={'msg': msg,'qq':qq})
         return 0
+
+    # 提醒事项(列表)转换为待发送信息
+    def List2Msg(self,thinglist):
+        msg=''
+        for thing in thinglist:
+            msg=msg+thing+'\n'
+        msg=msg[0:-1]
+        return msg
+
 
 # -------------------------开始-------------------------
 # 提供给腾讯云函数的main_handler
 def main_handler(event, context):
     timetable = getYmlConfig('timetable.yml')
-    remind(timetable['trigger'])
+    for user in timetable['trigger']:
+        remind(user)
 
-# main_handler(1,2)
+# 本地测试用
+
+# main_handler({},{})
+
+# while 1:
+#     main_handler({},{})
+#     waitingforintmin()
