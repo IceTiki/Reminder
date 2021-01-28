@@ -4,6 +4,9 @@ trigger:
     qq: '12345'
     #qmsg酱的key
     key: k1ioash01j3r1hifohe81h83
+    #citycode请在https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json里面找
+    citycode: 101010100
+    weathertime: '0 7 * * *'
     timetable:
       # 时间表
       # 早上
@@ -51,6 +54,8 @@ trigger:
     # qq: '1234567'
     # #qmsg酱的key
     # key: k1ioash01j3r1hifohe81h83
+    # citycode: 101010100
+    # weathertime: '0 7 * * *'
     # timetable:
     #   # 早上
     #   -
