@@ -1,6 +1,6 @@
 # Reminder
 
-这是一个提醒小工具！通过**qq**提醒起床，吃饭，喝水，生日，去哪里上课(课表)等等！
+这是一个提醒小工具！通过**qq**提醒起床，吃饭，喝水，生日，去哪里上课(课表)等等！(还有推送天气预报的功能~)
 
 在timetable中用[cron表达式](https://www.runoob.com/linux/linux-comm-crontab.html)定义提醒时间，qmsg酱就会提醒你了！
 
