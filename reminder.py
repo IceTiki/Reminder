@@ -56,13 +56,15 @@ def SendListByQmsg(thinglist,qq,key):
         return 0
     else:
         msg=List2Msg(thinglist)
-    res = requests.post(url='https://qmsg.zendee.cn/send/'+key,data={'msg': msg,'qq':qq})
+    SendByQmsg(msg,qq,key)
     return 0
 
 def SendByQmsg(msg,qq,key):
     # qmsg酱提醒
     msg=str(msg)
     res = requests.post(url='https://qmsg.zendee.cn/send/'+key,data={'msg': msg,'qq':qq})
+    if res.json()['status']!=200:
+        print('Qmsg酱发送失败：\nHTTP状态码('+str(res.json()['status'])+')，返回信息：'+res.json()['message'])
     return 0
 
 def List2Msg(thinglist):
@@ -77,6 +79,10 @@ def getwether(citycode):
     # 使用SoJson提供的API，返还今明后三天的天气。(https://www.sojson.com/blog/305.html)
     # citycode请参考https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json
     res=requests.get(url='http://t.weather.itboy.net/api/weather/city/'+str(citycode))
+    if res.json()['status']!=200:
+        WeatherError=('天气获取失败：\nHTTP状态码('+str(res.json()['status'])+')，返回信息：'+res.json()['message'])
+        print(WeatherError)
+        return WeatherError
     w=res.json()['data']
     cityname=res.json()['cityInfo']['city']
     w0=w['forecast'][0]
@@ -105,6 +111,7 @@ def main_handler(event, context):
     timetable = getYmlConfig('timetable.yml')
     for user in timetable['trigger']:
         remind(user)
+    for user in timetable['trigger']:
         pushweather(user)
 
 
