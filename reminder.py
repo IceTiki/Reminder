@@ -63,8 +63,6 @@ def SendByQmsg(msg,qq,key):
     # qmsg酱提醒
     msg=str(msg)
     res = requests.post(url='https://qmsg.zendee.cn/send/'+key,data={'msg': msg,'qq':qq})
-    if res.json()['status']!=200:
-        print('Qmsg酱发送失败：\nHTTP状态码('+str(res.json()['status'])+')，返回信息：'+res.json()['message'])
     return 0
 
 def List2Msg(thinglist):
@@ -84,11 +82,11 @@ def getwether(citycode):
         print(WeatherError)
         return WeatherError
     w=res.json()['data']
-    cityname=res.json()['cityInfo']['city']
+    cityinfo=(res.json()['cityInfo']['city']+'(更新时间')+res.json()['cityInfo']['updateTime']+')：\n'
     w0=w['forecast'][0]
     w1=w['forecast'][1]
     w2=w['forecast'][2]
-    strw0=('今日'+'天气'+w0['type']+'\n'
+    strw0=('今日('+w0['ymd']+')天气'+w0['type']+'\n'
         +'温度是：'+w0['high']+'——'+w0['low']+'\n'
         +'湿度'+w['shidu']+'，吹'+w0['fx']+'('+w0['fl']+')\n'
         +'空气质量：'+w['quality']+'(pm2.5：'+str(w['pm25'])+'，pm10：'+str(w['pm10'])+')\n'
@@ -102,7 +100,7 @@ def getwether(citycode):
         +'温度是：'+w2['high']+'——'+w2['low']+'\n'
         +'吹'+w2['fx']+'('+w2['fl']+')\n'
         +'太阳将在'+w2['sunrise']+'升起，'+w2['sunset']+'落下')
-    return cityname+'：\n'+strw0+strw1+strw2
+    return cityinfo+strw0+strw1+strw2
 
 # -------------------------开始-------------------------
 
