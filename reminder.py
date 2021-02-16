@@ -81,26 +81,48 @@ def getwether(citycode):
         WeatherError=('天气获取失败：\nHTTP状态码('+str(res.json()['status'])+')，返回信息：'+res.json()['message'])
         print(WeatherError)
         return WeatherError
+    # 处理数据结构
     w=res.json()['data']
-    cityinfo=(res.json()['cityInfo']['city']+'(更新时间')+res.json()['cityInfo']['updateTime']+')：\n'
     w0=w['forecast'][0]
     w1=w['forecast'][1]
     w2=w['forecast'][2]
-    strw0=('今日('+w0['ymd']+')天气'+w0['type']+'\n'
-        +'温度是：'+w0['high']+'——'+w0['low']+'\n'
-        +'湿度'+w['shidu']+'，吹'+w0['fx']+'('+w0['fl']+')\n'
-        +'空气质量：'+w['quality']+'(pm2.5：'+str(w['pm25'])+'，pm10：'+str(w['pm10'])+')\n'
-        +'太阳将在'+w0['sunrise']+'升起，'+w0['sunset']+'落下\n'
-        +'感冒指数：'+w['ganmao'])+'\n\n'
-    strw1=('明日天气'+w1['type']+'\n'
-        +'温度是：'+w1['high']+'——'+w1['low']+'\n'
-        +'吹'+w1['fx']+'('+w1['fl']+')\n'
-        +'太阳将在'+w1['sunrise']+'升起，'+w1['sunset']+'落下\n\n')
-    strw2=('后日天气'+w2['type']+'\n'
-        +'温度是：'+w2['high']+'——'+w2['low']+'\n'
-        +'吹'+w2['fx']+'('+w2['fl']+')\n'
-        +'太阳将在'+w2['sunrise']+'升起，'+w2['sunset']+'落下')
-    return cityinfo+strw0+strw1+strw2
+    # 输出字符串---
+    # 更新时间，城市名
+    wstr=(res.json()['cityInfo']['city']+'(更新时间')+res.json()['cityInfo']['updateTime']+')：\n'
+    # 湿度
+    wstr+='湿度：'
+    # 湿度百分比条
+    humidity=int(w['shidu'][0:-1])
+    wstr+='■'*int(humidity/10)+'□'*(10-int(humidity/10))+w['shidu']+'\n'
+    # 三日天气
+    wstr+='三日天气：\n'+w0['type']+'\n'+w1['type']+'\n'+w2['type']+'\n'
+    # 温度可视化
+    wstr+='三日温度：\n\n'
+    wl0,wl1,wl2,wh0,wh1,wh2=map(lambda x:int(x[3:-1]),[w0['low'],w1['low'],w2['low'],w0['high'],w1['high'],w2['high']])
+    temrange=list(range(min(wl0,wl1,wl2),max(wh0,wh1,wh2)+1))[::-1]
+    wstr+=w0['high'][3:]+w1['high'][3:]+w2['high'][3:]+'\n'
+    for i in temrange:
+        if i in range(wl0,wh0+1):
+            wstr+='  ■'
+        else:
+            wstr+='  □'
+        if i in range(wl1,wh1+1):
+            wstr+='    ■'
+        else:
+            wstr+='    □' 
+        if i in range(wl2,wh2+1):
+            wstr+='    ■'
+        else:
+            wstr+='    □'
+        wstr+='\n'
+    wstr+=w0['low'][3:]+w1['low'][3:]+w2['low'][3:]+'\n\n'
+    # 其他
+    # wstr+='其他：\n'
+    # wstr+='吹'+w0['fx']+'('+w0['fl']+')\n'
+    # wstr+='空气质量：\n'+w['quality']+'(pm2.5：'+str(w['pm25'])+'，pm10：'+str(w['pm10'])+')\n'
+    wstr+='太阳将在\n'+w0['sunrise']+'升起，'+w0['sunset']+'落下'# 删掉了个\n
+    # wstr+='感冒指数：'+w['ganmao']
+    return wstr
 
 # -------------------------开始-------------------------
 
