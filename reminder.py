@@ -25,14 +25,14 @@ def waitingforintmin():
 def remind(table):
     # 按照列表，推送当前事件
     # 列表中必须有timetable，qq，key
-    SendListByQmsg(matchlist(table['timetable']),table['qq'],table['key'])
+    SendListByQmsg(matchlist(table['timetable']),table['qmsg'])
     return 0
 
 def pushweather(userinfo):
     # 依照用户位置,qq,key,设定推送今日天气时间。推送天气。
     # 列表中必须有citycode，wethertime，qq，key
     if istime(userinfo['weathertime']):
-        SendByQmsg(getwether(userinfo['citycode']),userinfo['qq'],userinfo['key'])
+        SendByQmsg(getwether(userinfo['citycode']),userinfo['qmsg'])
     return 0
 
 def istime(string):
@@ -50,19 +50,22 @@ def matchlist(timetable):
             thinglist.append(item['title'])
     return thinglist
 
-def SendListByQmsg(thinglist,qq,key):
+def SendListByQmsg(thinglist,qmsg):
     # qmsg酱提醒(List类型)
     if len(thinglist)==0:
         return 0
     else:
         msg=List2Msg(thinglist)
-    SendByQmsg(msg,qq,key)
+    SendByQmsg(msg,qmsg)
     return 0
 
-def SendByQmsg(msg,qq,key):
+def SendByQmsg(msg,qmsg):
     # qmsg酱提醒
     msg=str(msg)
-    res = requests.post(url='https://qmsg.zendee.cn/send/'+key,data={'msg': msg,'qq':qq})
+    qq=qmsg['qq']
+    key=qmsg['key']
+    sendtype=qmsg['type']
+    res = requests.post(url='https://qmsg.zendee.cn/'+sendtype+'/'+key,data={'msg': msg,'qq':qq})
     return 0
 
 def List2Msg(thinglist):
