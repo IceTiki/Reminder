@@ -1,100 +1,34 @@
-#time使用cron表达式"分 时 日 月 周"，请参考https://www.runoob.com/linux/linux-comm-crontab.html
+#时间使用cron表达式"分 时 日 月 周"，请参考https://www.runoob.com/linux/linux-comm-crontab.html
 trigger:
   -
-    qq: '12345'
-    #qmsg酱的key
-    key: k1ioash01j3r1hifohe81h83
-    #citycode请在https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json里面找
+    qmsg:
+      qq: '********'
+      #qmsg酱的key
+      key: '****************'
+      #类型：group为群，send为个人
+      type: send
+    #citycode请在https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json 里面找
     citycode: 101010100
     weathertime: '0 7 * * *'
     timetable:
       # 时间表
-      # 早上
       -
         title: '早安，周围的一切都在孕育着美好。'
         time: '0 7 * * *'
       -
         title: '吃早餐是一件很重要的事情，一定要吃得好吃得饱哦。'
-        time: '15 7 * * *'
-      # 中午
-      -
-        title: '中午好！午饭吃了没？'
-        time: '0 12 * * *'
-      -
-        title: '午安，休息下吧。'
-        time: '0 13 * * *'
-      -
-        title: '该起床了！'
-        time: '0 14 * * *'
-      # 下午
-      -
-        title: '享受热水洗涤一天的疲惫吧~'
-        time: '0 17 * * *'
-      -
-        title: '饿了吗？自己煮吧！'
-        time: '0 18 * * *'
-      -
-        title: '饿了吗？快来吃吧！'
-        time: '30 18 * * *'
-      # 晚上
-      -
-        title: '夜幕降临，灯火初上。嗯——又是安宁祥和的一天呢。放下手上的工作准备睡觉吧。'
-        time: '0 22 * * *'
-      -
-        title: '天黑很久了，去休息吧。'
-        time: '30 22 * * *'
-      # 每日周期性提醒
-      -
-        title: '耽误太多时间，事情就做不完了。'
-        time: '15/30 14-20 * * *'  
-      -
-        title: '劳逸结合是不错，但也别放松过头。'
-        time: '15/30 8-11 * * *'     
+        time: '15 7 * * *'  
   # -
-    # qq: '1234567'
-    # #qmsg酱的key
-    # key: k1ioash01j3r1hifohe81h83
-    # citycode: 101010100
-    # weathertime: '0 7 * * *'
-    # timetable:
-    #   # 早上
-    #   -
-    #     title: '早安，早上的状态会为一天奠定基调，就算仍有困意，也要强迫自己打起精神来!'
-    #     time: '0 7 * * *'
-    #   -
-    #     title: '吃早餐是一件很重要的事情，一定要吃得好吃得饱哦。'
-    #     time: '15 7 * * *'
-    #   -
-    #     title: '万事万物都不可脱离联系独立存在，倘若一件事拖了后腿，与它联系的诸多事项也都会遭殃。所以，「今日事今日毕」。不是我性子急，而是事情本来就不能拖延。'
-    #     time: '30 7 * * *'
-    #   # 中午
-    #   -
-    #     title: '中午好！午饭吃了没？'
-    #     time: '0 12 * * *'
-    #   -
-    #     title: '午安，休息下吧。'
-    #     time: '0 13 * * *'
-    #   # 下午
-    #   -
-    #     title: '享受热水洗涤一天的疲惫吧~'
-    #     time: '0 18 * * *'
-    #   # 晚上
-    #   -
-    #     title: '夜幕降临，灯火初上。嗯——又是安宁祥和的一天呢。放下手上的工作准备睡觉吧。'
-    #     time: '30 21 * * *'
-    #   -
-    #     title: '天黑很久了，去休息吧。'
-    #     time: '30 22 * * *'
-    #   -
-    #     title: '不会有人晚睡吧，不会吧，不会吧。'
-    #     time: '*/15 23 * * *'
-    #   # 每日周期性提醒
-    #   -
-    #     title: '认真工作是不错，不要忘了补充水分。'
-    #     time: '0 7-11,14-22 * * *'
-    #   -
-    #     title: '耽误太多时间，事情就做不完了。'
-    #     time: '15/30 14-20 * * *'  
-    #   -
-    #     title: '劳逸结合是不错，但也别放松过头。'
-    #     time: '15/30 8-11 * * *'    
+  #   qmsg:
+  #     qq: '********'
+  #     #qmsg酱的key
+  #     key: '****************'
+  #     #类型：group为群，send为个人
+  #     type: send
+  #   citycode: 101010100
+  #   weathertime: '0 7 * * *'
+  #   timetable:
+  #     # 早上
+  #     -
+  #       title: '早安，早上的状态会为一天奠定基调，就算仍有困意，也要强迫自己打起精神来!'
+  #       time: '0 7 * * *'
