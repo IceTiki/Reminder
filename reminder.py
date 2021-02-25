@@ -19,6 +19,20 @@ def getYmlConfig(yaml_file):
     return dict(config)
 
 
+global_loggingtimes = 0
+
+
+def log(*args):
+    global global_loggingtimes
+    global_loggingtimes += 1
+    if args:
+        string = '|||log|||'+nt('%Y/%m/%d_%H:%M:%S') + \
+            '|'+str(global_loggingtimes)+'\n'
+        for item in args:
+            string += str(item)
+        print(string)
+
+
 def waitingforintmin():  # 1分钟延迟，会自动同步系统时间的00秒。
     print('触发~')
     waiting = 60-(int(time.strftime("%S", global_time.lt))+30) % 60
@@ -99,24 +113,30 @@ class Term:
 # ===============cron匹配===============
 
 class CronEvent:
-    def __init__(self, ces=[], ces_keys=[], ces_table={}):
+    def __init__(self, ces=1, ces_keys=1, ces_table=1):
         # ces全称cronevents
+        # 初始化后
+        # self.mlist是所有匹配当前时间的事件列表
+        # self.strml上述列表格式化后的字符串
+        if ces == 1:
+            ces = []
         # ces是一个列表，其中每一项都包含一个title和一个cron表达式
         # e.g. [{"title":"xxx","time":"* * * * *"},{"title":"yyy","time":"* * * * *"}]
+        if ces_keys == 1:
+            ces_keys = []
         # ces_keys是一个列表
         # 以其作为键值,在ces_table中抽取数据。
         # 比如['A','B']
+        if ces_table == 1:
+            ces_table = {}
         # ces_table是一个字典
         # 有多个键。每一个键都包含一个列表
         # 列表中每一项都包含一个title和一个cron表达式
         # e.g. {"A":[{"title":"xxx","time":"* * * * *"},{"title":"yyy","time":"* * * * *"}],"B":[{"title":"zzz","time":"* * * * *"}]}
-        # 初始化后
-        # self.mlist是所有匹配当前时间的事件列表
-        # self.strml上述列表格式化后的字符串
         for key in ces_keys:
             ces += ces_table[key]
         self.mlist = self.matchlist(ces)
-        self.strml = self.list2str()
+        self.strml = self.list2str(self.mlist)
 
     def __str__(self):
         return self.strml
@@ -129,10 +149,10 @@ class CronEvent:
                 thinglist.append(item['title'])
         return thinglist
 
-    def list2str(self):
+    def list2str(self, mlist):
         # 将列表格式化为str
         astr = ''
-        for i in self.mlist:
+        for i in mlist:
             astr = astr+i+'\n'
         astr = astr[0:-1]
         return astr
@@ -231,9 +251,7 @@ class Qmsg:  # Qmsg推送
         sendtype = 'group/' if self.qmsg['isgroup'] else 'send/'
         res = requests.post(url='https://qmsg.zendee.cn/'+sendtype +
                             self.qmsg['key'], data={'msg': msg, 'qq': self.qmsg['qq']})
-        print(res)
-    #    code = res.json()['code']
-    #    print(code)
+        log(res)
 
 
 # ===============消息整合===============
@@ -266,8 +284,10 @@ class Fmsg():  # 字符串整合
 def init_globalval():  # 配置全局变量
     global global_config
     global global_time
-    global_config = getYmlConfig('timetable.yml')
+    global global_loggingtimes
+    global_config = getYmlConfig('config.yml')
     global_time = Global_Time()
+    global_loggingtimes = 0
 
 
 class Global_Time():
@@ -275,7 +295,6 @@ class Global_Time():
         self.dt = dt.now()
         # self.dt = dt.strptime('2021/02/24_16:00:00','%Y/%m/%d_%H:%M:%S')
         self.lt = time.localtime()
-
 
 # ===============Main===============
 
@@ -286,10 +305,12 @@ def main_handler(event, context):
         msg = Fmsg()
         # Weather
         if ifcron(user['weather']['cron']):
-            msg.add(Weather(user['weather']['citycode']).f1())
+            str_Weather_f1 = Weather(user['weather']['citycode']).f1()
+            msg.add(str_Weather_f1)
         # CronEvent
-        msg.add(CronEvent(
-            ces_keys=user['cronevents_keys'], ces_table=global_config['cronevents_table']))
+        str_CronEvent = CronEvent(
+            ces_keys=user['cronevents_keys'], ces_table=global_config['cronevents_table'])
+        msg.add(str_CronEvent)
         # 推送
         Qmsg(user['qmsg']).send(msg)
 
