@@ -1,13 +1,14 @@
 #cron表达式"分 时 日 月 周"，请参考https://www.runoob.com/linux/linux-comm-crontab.html
 users:
   - qmsg:
-      qq: "*********" # qq号
-      key: ********* # qmsg酱的key
+      qq: "1796494817" # qq号
+      key: 627696c2fb6a9223198dc941aa9d8fae # qmsg酱的key
       isgroup: 0 # 类型：1为群，0为个人(不可混用)
     weather:
-      citycode: ********* # citycode请在https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json里面找
-      cron: "* * * * *" # 天气推送时间
+      citycode: 101280101 # citycode请在https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json里面找
+      cron: "0 7 * * *" # 天气推送时间(如果为int 0，则不推送，例如cron: 0)
     cronevents_keys: ["routine", "addition"] # 需要推送事件列表的key(见cronevents_table)
+    term_key: civil2 # 学期
 cronevents_table: # cron触发事件列表
   routine:
     - title: "测试1" # 标题
@@ -20,3 +21,9 @@ cronevents_table: # cron触发事件列表
   adddd:
     - title: "测试6"
       time: "* * * * *"
+term: # 学期
+  civil2:
+    firstday: "2021/03/08" # 学期第一天，格式YYYY/MM/DD
+    curriculum: # 课程表
+      - title: "测试2"
+        time: "* * * * *"
