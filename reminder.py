@@ -253,6 +253,31 @@ class Weather:
         self.f1str = wstr
         return wstr
 
+# ===============每日英语===============
+
+def shanbayDailyQuote():
+    _today=time.strftime("%Y-%m-%d", time.localtime())
+    sb_url = "https://apiv3.shanbay.com/weapps/dailyquote/quote/?date=" + _today
+    result = {}
+    record = requests.get(sb_url).json()
+    result['date'] = _today
+    result['content'] = record['content']
+    result['translation'] = record['translation']
+    strQuote="扇贝每日: \n%s\n%s"%(result['content'],result['translation'])
+    return strQuote
+
+def youdaoDailyQuote():
+    _today=time.strftime("%Y-%m-%d", time.localtime())
+    yd_url = "https://dict.youdao.com/infoline?mode=publish&date=" + _today + "&update=auto&apiversion=5.0"
+    result = {}
+    for record in requests.get(yd_url).json()[_today]:
+        if record['type'] == '壹句':
+            result['date'] = _today
+            result['content'] = record['title']
+            result['translation'] = record['summary']
+            break
+    strQuote="有道壹句: \n%s\n%s"%(result['content'],result['translation'])
+    return strQuote
 
 # ===============推送===============
 
@@ -325,6 +350,12 @@ def main_handler(event, context):
         if ifcron(user['weather']['cron']):
             str_Weather_f1 = Weather(user['weather']['citycode']).f1()
             msg.add(str_Weather_f1)
+        # ShanBay
+        if ifcron(user['shanbayDailyQuote']):
+            msg.add(shanbayDailyQuote())
+        # YouDao
+        if ifcron(user['youdaoDailyQuote']):
+            msg.add(youdaoDailyQuote())
         # CronEvent
         str_CronEvent = CronEvent(
             ces_keys=user['cronevents_keys'], ces_table=global_config['cronevents_table'])
