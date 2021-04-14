@@ -7,6 +7,8 @@ users:
     weather:
       citycode: 101280101 # citycode请在https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json里面找
       cron: "0 7 * * *" # 天气推送时间(如果为int 0，则不推送，例如cron: 0)
+    shanbayDailyQuote: "0 8 * * *" # 扇贝每日一句推送时间(如果为int 0，则不推送，例如cron: 0)
+    youdaoDailyQuote: "0 9 * * *" # 有道每日一句推送时间(如果为int 0，则不推送，例如cron: 0)
     cronevents_keys: ["routine", "addition"] # 需要推送事件列表的key(见cronevents_table)
     term_key: civil2 # 学期
 cronevents_table: # cron触发事件列表
