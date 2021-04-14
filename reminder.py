@@ -17,6 +17,7 @@ def getYmlConfig(yaml_file):
     config = yaml.load(file_data, Loader=yaml.FullLoader)
     return dict(config)
 
+
 def init_globalval():  # 配置全局变量
     global global_config
     global global_time
@@ -60,7 +61,7 @@ def waitingforintmin():  # 1分钟延迟，会自动同步系统时间的00秒�
 
 
 def ifcron(strcron):  # 检查cron表达式是否匹配当前时间
-    if strcron==0:
+    if strcron == 0:
         return 0
     else:
         return croniter.match(strcron, global_time.dt)
