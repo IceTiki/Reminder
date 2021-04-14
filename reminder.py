@@ -5,8 +5,7 @@ import calendar
 import requests
 import yaml
 
-
-# ===============通用函数===============
+# ===============全局变量===============
 
 
 def getYmlConfig(yaml_file):
@@ -18,6 +17,25 @@ def getYmlConfig(yaml_file):
     config = yaml.load(file_data, Loader=yaml.FullLoader)
     return dict(config)
 
+def init_globalval():  # 配置全局变量
+    global global_config
+    global global_time
+    global global_loggingtimes
+    global_config = getYmlConfig('config.yml')
+    global_time = Global_Time()
+    global_loggingtimes = 0
+
+
+class Global_Time():
+    def __init__(self):
+        self.dt = dt.now()
+        # self.dt = dt.strptime('2021/02/24_16:00:00','%Y/%m/%d_%H:%M:%S')
+        self.lt = time.localtime()
+
+
+init_globalval()
+
+# ===============通用函数===============
 
 global_loggingtimes = 0
 
@@ -42,7 +60,10 @@ def waitingforintmin():  # 1分钟延迟，会自动同步系统时间的00秒�
 
 
 def ifcron(strcron):  # 检查cron表达式是否匹配当前时间
-    return croniter.match(strcron, global_time.dt)
+    if strcron==0:
+        return 0
+    else:
+        return croniter.match(strcron, global_time.dt)
 
 
 def nt(tstr):  # 格式化输出当前时间(使用time模块)
@@ -180,12 +201,10 @@ class Weather:
     def f1(self):
         # 将updatewether获得的数据排版
         wetherdate = self.wetherdate
-        if not wetherdate:
-            return ''
         if wetherdate.json()['status'] != 200:
             WeatherError = ('天气获取失败：\nHTTP状态码('+str(wetherdate.json()
                                                     ['status'])+')，返回信息：'+wetherdate.json()['message'])
-            print(WeatherError)
+            log(WeatherError)
             return WeatherError
         # 处理数据结构
         w = wetherdate.json()['data']
@@ -279,23 +298,21 @@ class Fmsg():  # 字符串整合
         self.msg = ''
 
 
-# ===============全局配置===============
+# ===============函数调试用参数===============
+# try_config=getYmlConfig('timetable.yml')
+try_2M = Qmsg({'key': '627696c2fb6a9223198dc941aa9d8fae',
+               'qq': '1796494817', 'isgroup': 0})
+try_2G = Qmsg({'key': '627696c2fb6a9223198dc941aa9d8fae',
+               'qq': '489935275', 'isgroup': 1})
+try_weather = Weather(citycode=101281904)
+try_s = '2021/01/24,2021/03/06,0'
 
-def init_globalval():  # 配置全局变量
-    global global_config
-    global global_time
-    global global_loggingtimes
-    global_config = getYmlConfig('config.yml')
-    global_time = Global_Time()
-    global_loggingtimes = 0
-
-
-class Global_Time():
-    def __init__(self):
-        self.dt = dt.now()
-        # self.dt = dt.strptime('2021/02/24_16:00:00','%Y/%m/%d_%H:%M:%S')
-        self.lt = time.localtime()
-
+# ===============调试函数===============
+# try_2M.send('寒假进度条\n'+timebar(s=try_s))
+# if ifcron('0 7 * * *'):
+#     Qmsg({'key': '627696c2fb6a9223198dc941aa9d8fae',
+#             'qq': '489935275', 'isgroup': 1}).send('寒假进度条\n'+timebar(s='2021/01/24,2021/03/06,0'))
+# try_2G.send(Weather(101280301).f1())
 # ===============Main===============
 
 
