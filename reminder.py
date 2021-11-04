@@ -323,26 +323,7 @@ class Fmsg():  # 字符串整合
     def clean(self):
         self.msg = ''
 
-
-# ===============函数调试用参数===============
-# try_config=getYmlConfig('timetable.yml')
-try_2M = Qmsg({'key': '627696c2fb6a9223198dc941aa9d8fae',
-               'qq': '1796494817', 'isgroup': 0})
-try_2G = Qmsg({'key': '627696c2fb6a9223198dc941aa9d8fae',
-               'qq': '489935275', 'isgroup': 1})
-try_weather = Weather(citycode=101281904)
-try_s = '2021/01/24,2021/03/06,0'
-
-# ===============调试函数===============
-# try_2M.send('寒假进度条\n'+timebar(s=try_s))
-# if ifcron('0 7 * * *'):
-#     Qmsg({'key': '627696c2fb6a9223198dc941aa9d8fae',
-#             'qq': '489935275', 'isgroup': 1}).send('寒假进度条\n'+timebar(s='2021/01/24,2021/03/06,0'))
-# try_2G.send(Weather(101280301).f1())
-# ===============Main===============
-
-
-def main_handler(event, context):
+def main():
     init_globalval()
     for user in global_config['users']:
         msg = Fmsg()
@@ -364,10 +345,10 @@ def main_handler(event, context):
         Qmsg(user['qmsg']).send(msg)
 
 
-# 本地测试用
+def main_handler(event, context):
+    main()
 
-# main_handler({}, {})
-
-# while 1:
-#     main_handler({},{})
-#     waitingforintmin()
+if __name__ == '__name__':
+    while 1:
+        main()
+        waitingforintmin()
