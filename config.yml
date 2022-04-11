@@ -1,9 +1,20 @@
 #cron表达式"分 时 日 月 周"，请参考https://www.runoob.com/linux/linux-comm-crontab.html
 users:
-  - qmsg:
-      qq: "x" # qq号
-      key: x # qmsg酱的key
-      isgroup: 0 # 类型：1为群，0为个人(不可混用)
+  - sendMessage: # 推送函数的整体运行情况(不需要的项目不用填，可以删掉或者放着不管)
+      rl_emailApiUrl: http://api.ruoli.cc/mail/sendMail # 邮箱API的地址
+      rl_email: "" # email 接受通知消息的邮箱
+      iceCream_token: "" # iceCream(若离开发的qq推送)(https://ice.ruoli.cc)
+      qmsg_key: "" # qmsg推送的key
+      qmsg_qq: "" # qmsg推送的qq号
+      qmsg_isGroup: 0 # 此qq号是否为群(是的话填1，反之为0)
+      pushplus_parameters: "" # pushplus参数，填入令牌(token)即可推送。也可以填入"token=xxx&topic=xxx"形式自定义更多参数
+      pushplus_isNew: False # False使用旧版pushplus(https://pushplus.hxtrip.com)，True使用新版pushplus(https://www.pushplus.plus)
+      smtp_host: "smtp.qq.com" # SMTP服务器域名
+      smtp_user: "*****@qq.com" # SMTP服务器用户名
+      smtp_key: "" # SMTP服务器密钥
+      smtp_sender: "*****@qq.com" # 发送邮箱
+      smtp_receivers:
+        - "*****@qq.com" # 接收邮箱(可填多个)
     weather:
       citycode: 100000000 # citycode请在https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json里面找
       cron: "0 7 * * *" # 天气推送时间(如果为int 0，则不推送，例如cron: 0)

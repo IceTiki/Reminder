@@ -1,9 +1,10 @@
 from datetime import datetime as dt
 from croniter import croniter
 import time
-import calendar
 import requests
 import yaml
+
+import sendMessage
 
 # ===============全局变量===============
 
@@ -279,24 +280,6 @@ def youdaoDailyQuote():
     strQuote="有道壹句: \n%s\n%s"%(result['content'],result['translation'])
     return strQuote
 
-# ===============推送===============
-
-class Qmsg:  # Qmsg推送
-    def __init__(self, qmsg):
-        # 参数说明：
-        # qmsg={'key':'*****','qq':'*****','isgroup':0}
-        self.qmsg = qmsg
-
-    def send(self, msg):  # 消息推送函数
-        # 参数说明：
-        # msg：要发送的信息
-        msg = str(msg)
-        if msg == '':
-            return
-        sendtype = 'group/' if self.qmsg['isgroup'] else 'send/'
-        res = requests.post(url='https://qmsg.zendee.cn/'+sendtype +
-                            self.qmsg['key'], data={'msg': msg, 'qq': self.qmsg['qq']})
-        log(res)
 
 
 # ===============消息整合===============
@@ -342,7 +325,7 @@ def main():
             ces_keys=user['cronevents_keys'], ces_table=global_config['cronevents_table'])
         msg.add(str_CronEvent)
         # 推送
-        Qmsg(user['qmsg']).send(msg)
+        sendMessage.SendMessage(user['sendMessage']).send(msg)
 
 
 def main_handler(event, context):
